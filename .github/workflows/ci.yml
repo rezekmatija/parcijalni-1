@@ -1,0 +1,26 @@
+name: CI Pipeline
+
+on: [push]
+
+jobs:
+  test:
+    name: PHPUnit and PHPStan
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.0
+        extensions: intl, pdo_mysql, zip
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+
+    - name: PHPUnit
+      run: vendor/bin/phpunit
+
+    - name: PHPStan
+      run: vendor/bin/phpstan analyze
